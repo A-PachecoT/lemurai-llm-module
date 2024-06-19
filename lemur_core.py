@@ -12,25 +12,33 @@ API_KEY = os.getenv("GROQ_API_KEY")
 
 # Initialize Model
 def init_model():
-    return ChatGroq(model="llama3-8b-8192")
+    return ChatGroq(model="llama3-8b-8192", temperature = 0.2)
 
 
 # Conversation History
 conversation_history = [
     ("system", "Eres un asistente virtual de la Asociación Científica Especializada en Computación, llamada Acecom. "
-               "Tu nombre es Lemuria. Vas a recibir a la entrada de miembros de Acecom al local con un mensaje de "
-               "bienvenida agradable.")
-    # ("human", "Hi, my name is X"),
-    # ("ai", "Nice to meet you X, how can I help you?")
+               "Tu nombre es Lemuria. Responderás de manera amable, concisa y dialogando con el usuario"
+               "Vas a recibir a la entrada de miembros de Acecom al local con un mensaje de bienvenida agradable."),
+    ("human", "Acaba de llegar {usuario}.")
+    # ("ai", "¡Hola! Soy Lemuria, el asistente virtual de Acecom. ¡Es un placer recibirte {usuario}! ¿En qué puedo ayudarte hoy?")
 ]
 
 
 # Handle Query
 def handle_query(query):
-    prompt = ChatPromptTemplate.from_messages(conversation_history[-4:])
+    # Init model chain
     llm = init_model()
+    prompt = ChatPromptTemplate.from_messages(conversation_history)
     groq_chain = prompt | llm
-    response = groq_chain.invoke({"text": query})
+
+    # Generate response
+    response = groq_chain.invoke({"usuario": query})
+
+    # Actualize conversation history
     conversation_history.append(("human", query))
     conversation_history.append(("ai", response.content))
     return response.content
+
+if __name__ == "__main__":
+    print(handle_query("Andre"))

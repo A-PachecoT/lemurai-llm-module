@@ -4,7 +4,7 @@ import requests
 url = 'http://127.0.0.1:8000/query/'
 
 # Data to be sent
-data = {'text': 'Ingresó Alejandro al salón. Salúdalo!'}
+data = {'text': 'Arbués'}
 
 # Send POST request
 response = requests.post(url, json=data)
