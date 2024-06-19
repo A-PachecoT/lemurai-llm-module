@@ -1,7 +1,7 @@
 import requests
 
 # Endpoint URL
-url = 'http://127.0.0.1:8000/query/'
+url = 'http://localhost:8080/query/'
 
 # Data to be sent
 data = {'text': 'Arbués'}
